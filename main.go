@@ -82,9 +82,14 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("\nURL: https://%s:%d/%s\n", hostname, port, path)
+        fmt.Println("\nAccess Information")
+        fmt.Println("-------------------------------------")
+	fmt.Printf("URL: https://%s:%d/%s\n", hostname, port, path)
 	fmt.Printf("Username: %s\n", user)
 	fmt.Printf("Password: %s\n\n", pass)
+	fmt.Printf("Easy Access URL: https://%s:%s@%s:%d/%s\n\n", user, pass, hostname, port, path)
+
+
 	beego.BConfig.RunMode = "prod"
 	beego.BConfig.Listen.EnableHTTP = false
 	//beego.BConfig.Listen.HTTPPort = port
