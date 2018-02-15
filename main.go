@@ -99,6 +99,7 @@ func main() {
 	beego.BConfig.Listen.HTTPSCertFile = "ssl/cert.pem"
 	beego.BConfig.Listen.HTTPSKeyFile = "ssl/cert.key"
 	beego.BConfig.WebConfig.DirectoryIndex = true
+        beego.BConfig.MaxMemory = 134217728 // 128MiB
 	authPlugin := auth.NewBasicAuthenticator(SecretAuth, "cmd2web")
 	//beego.InsertFilter("*", beego.BeforeRouter, authPlugin)
 	//beego.InsertFilter("*", beego.BeforeExec, authPlugin)
