@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"math/rand"
 	"net"
@@ -67,6 +68,30 @@ func SecretAuth(username, password string) bool {
 	return false
 }
 
+func createCerts(certKey, certPub []byte) {
+	err := ioutil.WriteFile("/tmp/cert.key", certKey, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = ioutil.WriteFile("/tmp/cert.pem", certPub, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func deleteCerts() {
+	time.Sleep(time.Second * 10)
+	err := os.Remove("/tmp/cert.key")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = os.Remove("/tmp/cert.pem")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
 	cmd = os.Args[1:]
 	user = "cmd2web"
@@ -77,18 +102,19 @@ func main() {
 		log.Fatal(err)
 	}
 
+	createCerts(certKey, certPub)
+
 	hostname, err := os.Hostname()
 	if err != nil {
 		panic(err)
 	}
 
-        fmt.Println("\nAccess Information")
-        fmt.Println("-------------------------------------")
+	fmt.Println("\nAccess Information")
+	fmt.Println("-------------------------------------")
 	fmt.Printf("URL: https://%s:%d/%s\n", hostname, port, path)
 	fmt.Printf("Username: %s\n", user)
 	fmt.Printf("Password: %s\n\n", pass)
 	fmt.Printf("Easy Access URL: https://%s:%s@%s:%d/%s\n\n", user, pass, hostname, port, path)
-
 
 	beego.BConfig.RunMode = "prod"
 	beego.BConfig.Listen.EnableHTTP = false
@@ -96,10 +122,10 @@ func main() {
 	beego.BConfig.Log.AccessLogs = true
 	beego.BConfig.Listen.EnableHTTPS = true
 	beego.BConfig.Listen.HTTPSPort = port
-	beego.BConfig.Listen.HTTPSCertFile = "ssl/cert.pem"
-	beego.BConfig.Listen.HTTPSKeyFile = "ssl/cert.key"
+	beego.BConfig.Listen.HTTPSCertFile = "/tmp/cert.pem"
+	beego.BConfig.Listen.HTTPSKeyFile = "/tmp/cert.key"
 	beego.BConfig.WebConfig.DirectoryIndex = true
-        beego.BConfig.MaxMemory = 134217728 // 128MiB
+	beego.BConfig.MaxMemory = 134217728 // 128MiB
 	authPlugin := auth.NewBasicAuthenticator(SecretAuth, "cmd2web")
 	//beego.InsertFilter("*", beego.BeforeRouter, authPlugin)
 	//beego.InsertFilter("*", beego.BeforeExec, authPlugin)
@@ -109,5 +135,6 @@ func main() {
 	beego.SetStaticPath(fmt.Sprintf("/%s/files", path), ".")
 	beego.Router(path, &CmdController{})
 	beego.Router("/*", &MainController{})
+	go deleteCerts()
 	beego.Run()
 }
