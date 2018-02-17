@@ -68,25 +68,25 @@ func SecretAuth(username, password string) bool {
 	return false
 }
 
-func createCerts(certKey, certPub []byte) {
-	err := ioutil.WriteFile("/tmp/cert.key", certKey, 0644)
+func createCerts(tempdir string, certKey, certPub []byte) {
+	err := ioutil.WriteFile(fmt.Sprintf("%s/cert.key", tempdir), certKey, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = ioutil.WriteFile("/tmp/cert.pem", certPub, 0644)
+	err = ioutil.WriteFile(fmt.Sprintf("%s/cert.pem", tempdir), certPub, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func deleteCerts() {
+func deleteCerts(tempdir string) {
 	time.Sleep(time.Second * 10)
-	err := os.Remove("/tmp/cert.key")
+	err := os.Remove(fmt.Sprintf("%s/cert.key", tempdir))
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = os.Remove("/tmp/cert.pem")
+	err = os.Remove(fmt.Sprintf("%s/cert.pem", tempdir))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -97,12 +97,14 @@ func main() {
 	user = "cmd2web"
 	pass = RandString(8)
 	path := RandString(30)
+	tempdir := os.TempDir()
+	fmt.Println(tempdir)
 	port, err := GetFreePort()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	createCerts(certKey, certPub)
+	createCerts(tempdir, certKey, certPub)
 
 	hostname, err := os.Hostname()
 	if err != nil {
@@ -135,6 +137,6 @@ func main() {
 	beego.SetStaticPath(fmt.Sprintf("/%s/files", path), ".")
 	beego.Router(path, &CmdController{})
 	beego.Router("/*", &MainController{})
-	go deleteCerts()
+	go deleteCerts(tempdir)
 	beego.Run()
 }
