@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/astaxie/beego"
@@ -32,7 +33,7 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	this.Ctx.WriteString(string("That's not the secret string!"))
+	this.Ctx.WriteString(fmt.Sprintf(four04html, "Sorry, correct URL required!"))
 }
 
 type CmdController struct {
@@ -42,9 +43,9 @@ type CmdController struct {
 func (this *CmdController) Get() {
 	out, err := exec.Command(cmd[0], cmd[1:]...).Output()
 	if err != nil {
-		log.Fatal(err)
+		out = []byte(err.Error())
 	}
-	this.Ctx.WriteString(string(out))
+	this.Ctx.WriteString(fmt.Sprintf(cmdhtml, strings.Join(cmd, " "), time.Now().Format(time.RFC1123), string(out)))
 }
 
 func GetFreePort() (int, error) {
