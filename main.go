@@ -98,7 +98,6 @@ func main() {
 	pass = RandString(8)
 	path := RandString(30)
 	tempdir := os.TempDir()
-	fmt.Println(tempdir)
 	port, err := GetFreePort()
 	if err != nil {
 		log.Fatal(err)
@@ -124,8 +123,8 @@ func main() {
 	beego.BConfig.Log.AccessLogs = true
 	beego.BConfig.Listen.EnableHTTPS = true
 	beego.BConfig.Listen.HTTPSPort = port
-	beego.BConfig.Listen.HTTPSCertFile = "/tmp/cert.pem"
-	beego.BConfig.Listen.HTTPSKeyFile = "/tmp/cert.key"
+	beego.BConfig.Listen.HTTPSCertFile = fmt.Sprintf("%s/cert.pem", tempdir)
+	beego.BConfig.Listen.HTTPSKeyFile = fmt.Sprintf("%s/cert.key", tempdir)
 	beego.BConfig.WebConfig.DirectoryIndex = true
 	beego.BConfig.MaxMemory = 134217728 // 128MiB
 	authPlugin := auth.NewBasicAuthenticator(SecretAuth, "cmd2web")
