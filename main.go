@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -94,10 +95,11 @@ func deleteCerts(tempdir string) {
 }
 
 func main() {
-	cmd = os.Args[1:]
+	//cmd = os.Args[1:]
+	cmd = flag.Args()
 	user = "cmd2web"
 	pass = RandString(8)
-	path := RandString(30)
+	accessKey := RandString(32)
 	tempdir := os.TempDir()
 	port, err := GetFreePort()
 	if err != nil {
@@ -113,10 +115,13 @@ func main() {
 
 	fmt.Println("\nAccess Information")
 	fmt.Println("-------------------------------------")
-	fmt.Printf("URL: https://%s:%d/%s\n", hostname, port, path)
+	fmt.Printf("Command output: https://%s:%d/%s\n", hostname, port, accessKey)
+	if *exposeFlag != "" {
+		fmt.Printf("Exposed directory: https://%s:%d/%s/files/\n", hostname, port, accessKey)
+	}
 	fmt.Printf("Username: %s\n", user)
 	fmt.Printf("Password: %s\n\n", pass)
-	fmt.Printf("Easy Access URL: https://%s:%s@%s:%d/%s\n\n", user, pass, hostname, port, path)
+	fmt.Printf("Easy Access URL: https://%s:%s@%s:%d/%s\n\n", user, pass, hostname, port, accessKey)
 
 	beego.BConfig.RunMode = "prod"
 	beego.BConfig.Listen.EnableHTTP = false
@@ -134,8 +139,10 @@ func main() {
 	//Tried the above two variations, but the "beego.BeforeStatic" is the only
 	//one the that will prompt for password for static content (files in this case)
 	beego.InsertFilter("*", beego.BeforeStatic, authPlugin)
-	beego.SetStaticPath(fmt.Sprintf("/%s/files", path), ".")
-	beego.Router(path, &CmdController{})
+	if *exposeFlag != "" {
+		beego.SetStaticPath(fmt.Sprintf("/%s/files", accessKey), *exposeFlag)
+	}
+	beego.Router(accessKey, &CmdController{})
 	beego.Router("/*", &MainController{})
 	go deleteCerts(tempdir)
 	beego.Run()
