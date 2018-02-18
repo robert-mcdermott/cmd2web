@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-// define and set default command parameter flags
+// define command parameter flags
 var exposeFlag = flag.String("expose", "", "[optional] expose this directory via web at https://hostname/accesscode/files")
 var expireFlag = flag.Int("expire", 0, "[optional] terminate the cmd2web server after this many minutes")
 var helpFlag = flag.Bool("h", false, "print usage information")
@@ -16,8 +16,8 @@ func init() {
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "\nUsage: %s [--expose <path-to-dir> --expire <minutes>] <command>>\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nExample: %s uptime\n\n", os.Args[0])
-		//flag.PrintDefaults()
-		fmt.Println()
+		//flag.PrintDefaults()  // with this uncommented, it prints unrelated flags from the beego server
+		fmt.Fprintf(os.Stderr, "")
 	}
 	flag.Parse()
 

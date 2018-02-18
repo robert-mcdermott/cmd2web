@@ -1,5 +1,7 @@
 package main
 
+// a self-signed SSL cert/key pair; replace this with a vaild cert
+// if this is for serious use cases
 var certKey = []byte(`-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEA+YrH29Ki3OQRlZ13PFNoxQQz7pBvH7Cs6gnqLPGT6mMUpdRT
 TGGd7j4JCYcMpJzjmvmQUpNlHh1hlDT+QAkfWhzoCnqtCv4tWQoQKZkL5uTW+cuo

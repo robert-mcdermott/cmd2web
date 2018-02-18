@@ -1,5 +1,7 @@
 package main
 
+// template for the command output page
+// I know there is a better way to do this, this is just to keep things simple
 var cmdhtml = `
 	<!DOCTYPE html>
 	<html>
@@ -17,6 +19,7 @@ var cmdhtml = `
 		</body>
 	</html>`
 
+// template of the unknown path error page
 var four04html = `
 	<!DOCTYPE html>
 	<html>
