@@ -106,6 +106,10 @@ func deleteCerts(tempdir string) {
 func main() {
 	//cmd = os.Args[1:]
 	cmd = flag.Args()
+	if len(cmd) == 0 {
+		flag.Usage()
+		os.Exit(1)
+	}
 	user = "cmd2web"
 	pass = randString(8)
 	accessKey := randString(32)
@@ -145,6 +149,10 @@ func main() {
 	beego.InsertFilter("*", beego.BeforeStatic, authPlugin)
 	// if the user provided an "--expose </path>" flag, expose the provided directory as a filesystem
 	if *exposeFlag != "" {
+		// make sure that the path to the directory or file the user provided exists
+		if _, err := os.Stat(*exposeFlag); os.IsNotExist(err) {
+			log.Fatal(err)
+		}
 		beego.SetStaticPath(fmt.Sprintf("/%s/file", accessKey), *exposeFlag)
 	}
 	// set the router that provides the command output
@@ -162,11 +170,6 @@ func main() {
 			fmt.Printf("\nTimeout of %d minutes expired, shutting down...\n\n", t)
 			os.Exit(0)
 		}(*expireFlag)
-	}
-
-	// make sure that the path to the directory or file the user provided exists
-	if _, err := os.Stat(*exposeFlag); os.IsNotExist(err) {
-		log.Fatal(err)
 	}
 
 	// provide user some information on stderr on how to access the server
