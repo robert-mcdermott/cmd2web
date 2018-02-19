@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -41,4 +42,17 @@ func (c *cmdController) Get() {
 		}
 		c.Ctx.WriteString(fmt.Sprintf(cmdhtml, refresh, strings.Join(cmd, " "), time.Now().Format(time.RFC1123), string(out)))
 	}
+}
+
+type stopController struct {
+	beego.Controller
+}
+
+func (c *stopController) Get() {
+	go func(t int) {
+		<-time.After(time.Second * time.Duration(t))
+		fmt.Fprintln(os.Stderr, "\nreceived stop signal, stopping the cmd2web server...")
+		os.Exit(0)
+	}(60)
+	c.Ctx.WriteString(fmt.Sprintf(four04html, "Stopping cmd2web app in 60 seconds..."))
 }

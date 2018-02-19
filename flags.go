@@ -7,24 +7,41 @@ import (
 )
 
 // Define command parameter flags
-// I had to create a new flagset namespace because beego has it's own flags that were begin displayed by flag.PrintDefaults
-var flagset = new(flag.FlagSet)
-var exposeFlag = flagset.String("expose", "", "\n[optional] expose this directory or file at https://*/file\n"+
+var exposeFlag = flag.String("expose", "", "\n[optional] expose this directory or file at https://*/file\n"+
 	"if a directory path is given it will provide an html file/dir listing\n"+
 	"that you can navigate files and sub directories. if a file path is\n"+
 	"provided, the file will be availible at the file URL\n")
-var expireFlag = flagset.Int("expire", 0, "\n[optional] terminate the cmd2web server after the provide number of\n"+
+var expireFlag = flag.Int("expire", 0, "\n[optional] terminate the cmd2web server after the provide number of\n"+
 	"minutes. If an expiration is not provide the server will run indefinately\n"+
 	"until terminated manually\n")
-var refreshFlag = flagset.Int("refresh", 0, "\n[optional] page refresh interval in seconds; only works with html\n"+
+var refreshFlag = flag.Int("refresh", 0, "\n[optional] page refresh interval in seconds; only works with html\n"+
 	"output format with GUI web browsers (Chrome, Firefox, etc...). each\n"+
 	"refresh re-runs the command.\n")
-var rawFlag = flagset.Bool("raw", false, "\n[optional] the default output is html; this flag enables raw text\n"+
+var rawFlag = flag.Bool("raw", false, "\n[optional] the default output is html; this flag enables raw text\n"+
 	"output that is more suitable for use with curl or using as input to\n"+
 	"another program or logging.\n")
-var helpFlag = flagset.Bool("help", false, "\nprint usage information\n")
+var helpFlag = flag.Bool("help", false, "\nprint usage information\n")
 
 func init() {
+	// This a nasty hack, beego has it's own unrelated flags that appear in the usage that I want to hide
+	// I can hide them with a custom flagset (below) but not sure how to do this without repeating the flag
+	// definitions again, other than just printing a manual string version with the undesired flags missing.
+	var flagset = new(flag.FlagSet)
+	flagset.String("expose", "", "\n[optional] expose this directory or file at https://*/file\n"+
+		"if a directory path is given it will provide an html file/dir listing\n"+
+		"that you can navigate files and sub directories. if a file path is\n"+
+		"provided, the file will be availible at the file URL\n")
+	flagset.Int("expire", 0, "\n[optional] terminate the cmd2web server after the provide number of\n"+
+		"minutes. If an expiration is not provide the server will run indefinately\n"+
+		"until terminated manually\n")
+	flagset.Int("refresh", 0, "\n[optional] page refresh interval in seconds; only works with html\n"+
+		"output format with GUI web browsers (Chrome, Firefox, etc...). each\n"+
+		"refresh re-runs the command.\n")
+	flagset.Bool("raw", false, "\n[optional] the default output is html; this flag enables raw text\n"+
+		"output that is more suitable for use with curl or using as input to\n"+
+		"another program or logging.\n")
+	flagset.Bool("help", false, "\nprint usage information\n")
+
 	// usage function that's executed if a required flag is missing or user asks for help (-h)
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "\nUsage: %s [--expose <path> --expire <minutes> --refresh <seconds> --raw] <command>\n", os.Args[0])

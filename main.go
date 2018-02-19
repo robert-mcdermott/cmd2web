@@ -132,7 +132,9 @@ func main() {
 	}
 	// set the router that provides the command output
 	beego.Router(accessKey, &cmdController{})
-	// set the default router that doesn't match the static or command path/route
+	// set the router that allows user to remotely stop the cmd2web server.
+	beego.Router(fmt.Sprintf("/%s/stop", accessKey), &stopController{})
+	// set the default router that doesn't match the static, command or stop route
 	beego.Router("/*", &mainController{})
 
 	// delete the certs in the backgroup
@@ -150,13 +152,14 @@ func main() {
 	// provide user some information on stderr on how to access the server
 	fmt.Fprintf(os.Stderr, "\nAccess Information\n")
 	fmt.Fprintf(os.Stderr, "-------------------------------------\n")
-	fmt.Fprintf(os.Stderr, "Command output: https://%s:%d/%s\n", hostname, port, accessKey)
+	fmt.Fprintf(os.Stderr, "Command output:    https://%s:%d/%s\n", hostname, port, accessKey)
+	fmt.Fprintf(os.Stderr, "Remote stop:       https://%s:%d/%s/stop\n", hostname, port, accessKey)
 	if *exposeFlag != "" {
-		fmt.Fprintf(os.Stderr, "Exposed directory: https://%s:%d/%s/file/\n", hostname, port, accessKey)
+		fmt.Fprintf(os.Stderr, "Exposed directory: https://%s:%d/%s/file\n", hostname, port, accessKey)
 	}
 	fmt.Fprintf(os.Stderr, "Username: %s\n", user)
 	fmt.Fprintf(os.Stderr, "Password: %s\n\n", pass)
-	fmt.Fprintf(os.Stderr, "Easy Access URL: https://%s:%s@%s:%d/%s\n", user, pass, hostname, port, accessKey)
+	fmt.Fprintf(os.Stderr, "Easy Access URL:   https://%s:%s@%s:%d/%s\n", user, pass, hostname, port, accessKey)
 	fmt.Fprintf(os.Stderr, "-------------------------------------\n")
 	// start the server
 	beego.Run()
