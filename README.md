@@ -43,3 +43,19 @@ Example 2: expose the "myproject" directory to the web for 60 minutes.
 
         ./cmd2web --expire 60 --expose /home/rmcdermo/myproject /usr/bin/true
 ```
+
+After starting a server, it will provie access information. Example:
+
+```
+Access Information
+-------------------------------------
+Command output:    https://test.rigel.net:53208/IWYrKyhDVmWWWFSlmQKnDP82oTSfh9Wc
+Remote stop:       https://test.rigel.net:53208/IWYrKyhDVmWWWFSlmQKnDP82oTSfh9Wc/stop
+Exposed directory: https://test.rigel.net:53208/IWYrKyhDVmWWWFSlmQKnDP82oTSfh9Wc/file
+Username: cmd2web
+Password: hYe9SdYi
+
+Easy Access URL:   https://cmd2web:hYe9SdYi@test.rigel.net:53208/IWYrKyhDVmWWWFSlmQKnDP82oTSfh9Wc
+-------------------------------------
+```
+
