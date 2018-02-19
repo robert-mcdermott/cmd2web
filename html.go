@@ -6,6 +6,7 @@ var cmdhtml = `
 	<!DOCTYPE html>
 	<html>
 		<head>
+			%s
 			<style>
 				body {background-color: black;}
 				h3   {color: #fc9a85;}
@@ -13,8 +14,8 @@ var cmdhtml = `
 			</style>
 		</head>
 		<body>
-			<h3>Command: %s </h3>
-			<h3>Time: %s </h3>
+			<h3>Command: %s</h3>
+			<h3>Time: %s</h3>
 			<p><pre>%s</pre></p>
 		</body>
 	</html>`

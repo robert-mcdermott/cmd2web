@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 	"time"
 
@@ -50,7 +51,17 @@ func (c *cmdController) Get() {
 	if err != nil {
 		out = []byte(err.Error())
 	}
-	c.Ctx.WriteString(fmt.Sprintf(cmdhtml, strings.Join(cmd, " "), time.Now().Format(time.RFC1123), string(out)))
+	if *rawFlag {
+		c.Ctx.WriteString(string(out))
+	} else {
+		refresh := strconv.Itoa(*refreshFlag)
+		if refresh != "0" {
+			refresh = fmt.Sprintf("<meta http-equiv=\"refresh\" content=\"%s\">", refresh)
+		} else {
+			refresh = ""
+		}
+		c.Ctx.WriteString(fmt.Sprintf(cmdhtml, refresh, strings.Join(cmd, " "), time.Now().Format(time.RFC1123), string(out)))
+	}
 }
 
 // find a free TCP port on the system that we can use
@@ -181,7 +192,7 @@ func main() {
 	}
 	fmt.Fprintf(os.Stderr, "Username: %s\n", user)
 	fmt.Fprintf(os.Stderr, "Password: %s\n\n", pass)
-	fmt.Fprintf(os.Stderr, "Easy Access URL: https://%s:%s@%s:%d/%s\n\n", user, pass, hostname, port, accessKey)
+	fmt.Fprintf(os.Stderr, "Easy Access URL: https://%s:%s@%s:%d/%s\n", user, pass, hostname, port, accessKey)
 	fmt.Fprintf(os.Stderr, "-------------------------------------\n")
 	// start the server
 	beego.Run()
