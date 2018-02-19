@@ -1,5 +1,9 @@
 # cmd2web - Command to Web
 
+Run a command on a system and access the command output via a remote web browser.
+
+![cmd2web example](images/cmd2web-browser.png)
+
 ```
 Usage: ./cmd2web [--expose <path> --expire <minutes> --refresh <seconds> --raw] <command>
 
@@ -58,4 +62,6 @@ Password: hYe9SdYi
 Easy Access URL:   https://cmd2web:hYe9SdYi@test.rigel.net:53208/IWYrKyhDVmWWWFSlmQKnDP82oTSfh9Wc
 -------------------------------------
 ```
+
+
 
