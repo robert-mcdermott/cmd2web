@@ -52,7 +52,7 @@ Flags:
 
 Example 1: list they systems process table and refresh the output every 30 seconds.
 
-        ./cmd2web --refresh 30 bash ps aux"
+        ./cmd2web --refresh 30 ps aux
 
 Example 2: expose the "myproject" directory to the web for 60 minutes.
 
