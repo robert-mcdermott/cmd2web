@@ -50,7 +50,7 @@ Flags:
         refresh re-runs the command.
     
 
-Example 1: list they systems process table and refresh the output every 30 seconds.
+Example 1: list the systems process table and refresh the output every 30 seconds.
 
         ./cmd2web --refresh 30 ps aux
 
