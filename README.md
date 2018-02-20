@@ -7,7 +7,7 @@
 
 Cmd2web is a utility that allows you to execute a command on a system and then securely view the output of that command on any other system via a web browser. Each time the page is reloaded the command is re-run and the output is updated. You can set the refresh interval that the command will be automatically re-run by you web browser.  
 
-In addition to command output you can also also optionally expose a directory or file via Cmd2web and make it accessable via a web browser on a remove system with the --expose flag. If you provide it a path to a directory, you'll get an html directory listing that lets you navigate sub-directories and view files. If a path to a file is provided path, only that file will be availible. If the exposed directory contains an 'index.html' file, it will be exposed rather than showing a directory listing.
+In addition to command output you can also also optionally expose a directory or file via Cmd2web and make it accessible via a web browser on a remove system with the --expose flag. If you provide it a path to a directory, you'll get an html directory listing that lets you navigate sub-directories and view files. If a path to a file is provided path, only that file will be available. If the exposed directory contains an 'index.html' file, it will be exposed rather than showing a directory listing.
 
 An expiration timer can be optionally set that will stop the Cmd2web server when the timer expires. 
 
@@ -45,7 +45,7 @@ Flags:
   -port int
     	
     	[optional] specify a tcp port to listen on. By default a random port is
-    	selected for you; this flag overides that behavior. You must be root to assign a port below 1024
+    	selected for you; this flag overrides that behavior. You must be root to assign a port below 1024
     	
   -raw
     	
@@ -78,16 +78,19 @@ After starting a Cmd2web server it will provide the required connection informat
 ```
 Access Information
 -------------------------------------
-Command output:    https://test.rigel.net:53208/IWYrKyhDVmWWWFSlmQKnDP82oTSfh9Wc
-Remote stop:       https://test.rigel.net:53208/IWYrKyhDVmWWWFSlmQKnDP82oTSfh9Wc/stop
-Exposed directory: https://test.rigel.net:53208/IWYrKyhDVmWWWFSlmQKnDP82oTSfh9Wc/file
-Username: cmd2web
-Password: hYe9SdYi
+Command output:    https://test.rigel.net:42938/2EeRbdGXIwMaYqZQ3dk611n98piGVbp7
+Remote stop:       https://test.rigel.net:42938/2EeRbdGXIwMaYqZQ3dk611n98piGVbp7/stop
+Exposed directory: https://test.rigel.net:42938/2EeRbdGXIwMaYqZQ3dk611n98piGVbp7/file
 
-Easy Access URL:   https://cmd2web:hYe9SdYi@test.rigel.net:53208/IWYrKyhDVmWWWFSlmQKnDP82oTSfh9Wc
+Credentials:
+
+  Username: cmd2web
+  Password: fLPlehdO
+
+Easy Access URL:   https://cmd2web:fLPlehdO@test.rigel.net:42938/2EeRbdGXIwMaYqZQ3dk611n98piGVbp7
 -------------------------------------
 ```
 
 ## Is this secure?
 
-The connection is SSL encrypted, a 32 byte random access key path is required to access the command output and exposed files and authenitcation (username/password) is required. In addition the application takes no input via the exposed web site so there is no way to inject any malicious commands. 
+The connection is SSL encrypted, a 32 byte random access key path is required to access the command output and exposed files and authentication (username/password) is required. In addition the application takes no input via the exposed web site so there is no way to inject any malicious commands. 
