@@ -5,7 +5,7 @@
 
 ## What is Cmd2web?
 
-Cmd2web is a utility that allows you to execute a command on a system and then view the output of that command on any other system via a web browser. Each time the page is reloaded the command is re-run and the output is updated. You can set the refresh interval that the command will be automatically re-run by you web browser.  
+Cmd2web is a utility that allows you to execute a command on a system and then securely view the output of that command on any other system via a web browser. Each time the page is reloaded the command is re-run and the output is updated. You can set the refresh interval that the command will be automatically re-run by you web browser.  
 
 In addition to command output you can also also optionally expose a directory or file via Cmd2web and make it accessable via a web browser on a remove system with the --expose flag. If you provide it a path to a directory, you'll get an html directory listing that lets you navigate sub-directories and view files. If a path to a file is provided path, only that file will be availible. If the exposed directory contains an 'index.html' file, it will be exposed rather than showing a directory listing.
 
@@ -62,7 +62,7 @@ Example 2: expose the "myproject" directory to the web for 60 minutes.
 
 ## Accessing the Cmd2web server
 
-After starting a Cmd2web server it will provide the required connection information on the consoles standard error.  Here is an example:
+After starting a Cmd2web server it will provide the required connection information on the console's standard error.  Here is an example:
 
 ```
 Access Information
