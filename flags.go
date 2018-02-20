@@ -47,7 +47,7 @@ func init() {
 		fmt.Fprintf(os.Stderr, "\nUsage: %s [--expose <path> --expire <minutes> --refresh <seconds> --raw] <command>\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nFlags:\n\n")
 		flagset.PrintDefaults() // note "flagset." vs "flag."
-		fmt.Fprintf(os.Stderr, "\nExample 1: list they systems process table and refresh the output every 30 seconds.\n"+
+		fmt.Fprintf(os.Stderr, "\nExample 1: list the systems process table and refresh the output every 30 seconds.\n"+
 			"\n\t%s --refresh 30 ps aux\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nExample 2: expose the \"myproject\" directory to the web for 60 minutes.\n"+
 			"\n\t%s --expire 60 --expose /home/rmcdermo/myproject /usr/bin/true\n\n", os.Args[0])
