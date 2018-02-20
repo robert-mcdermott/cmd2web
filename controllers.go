@@ -11,7 +11,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-// mainController provides attempts to access the server withouth the correct path
+// mainController provides attempts to access the server without the correct path
 // an error message
 type mainController struct {
 	beego.Controller

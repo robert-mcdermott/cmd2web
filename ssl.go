@@ -1,6 +1,6 @@
 package main
 
-// a self-signed SSL cert/key pair; replace this with a vaild cert
+// a self-signed SSL cert/key pair; replace this with a valid cert
 // if this is for serious use cases
 var certKey = []byte(`-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEA+YrH29Ki3OQRlZ13PFNoxQQz7pBvH7Cs6gnqLPGT6mMUpdRT

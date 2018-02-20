@@ -10,9 +10,9 @@ import (
 var exposeFlag = flag.String("expose", "", "\n[optional] expose this directory or file at https://*/file\n"+
 	"if a directory path is given it will provide an html file/dir listing\n"+
 	"that you can navigate files and sub directories. if a file path is\n"+
-	"provided, the file will be availible at the file URL\n")
+	"provided, the file will be available at the file URL\n")
 var expireFlag = flag.Int("expire", 0, "\n[optional] terminate the cmd2web server after the provide number of\n"+
-	"minutes. If an expiration is not provide the server will run indefinately\n"+
+	"minutes. If an expiration is not provide the server will run indefinitely\n"+
 	"until terminated manually\n")
 var refreshFlag = flag.Int("refresh", 0, "\n[optional] page refresh interval in seconds; only works with html\n"+
 	"output format with GUI web browsers (Chrome, Firefox, etc...). each\n"+
@@ -21,6 +21,10 @@ var rawFlag = flag.Bool("raw", false, "\n[optional] the default output is html; 
 	"output that is more suitable for use with curl or using as input to\n"+
 	"another program or logging.\n")
 var helpFlag = flag.Bool("help", false, "\nprint usage information\n")
+var noauthFlag = flag.Bool("noauth", false, "\n[optional] disable basic (user/pass) authentication. By default\n"+
+	"authentication is enabled\n")
+var portFlag = flag.Int("port", 0, "\n[optional] specify a tcp port to listen on. By default a random port is\n"+
+	"selected for you; this flag overides that behavior. You must be root to assign a port below 1024\n")
 
 func init() {
 	// This a nasty hack, beego has it's own unrelated flags that appear in the usage that I want to hide
@@ -30,9 +34,9 @@ func init() {
 	flagset.String("expose", "", "\n[optional] expose this directory or file at https://*/file\n"+
 		"if a directory path is given it will provide an html file/dir listing\n"+
 		"that you can navigate files and sub directories. if a file path is\n"+
-		"provided, the file will be availible at the file URL\n")
+		"provided, the file will be available at the file URL\n")
 	flagset.Int("expire", 0, "\n[optional] terminate the cmd2web server after the provide number of\n"+
-		"minutes. If an expiration is not provide the server will run indefinately\n"+
+		"minutes. If an expiration is not provide the server will run indefinitely\n"+
 		"until terminated manually\n")
 	flagset.Int("refresh", 0, "\n[optional] page refresh interval in seconds; only works with html\n"+
 		"output format with GUI web browsers (Chrome, Firefox, etc...). each\n"+
@@ -41,10 +45,14 @@ func init() {
 		"output that is more suitable for use with curl or using as input to\n"+
 		"another program or logging.\n")
 	flagset.Bool("help", false, "\nprint usage information\n")
+	flagset.Bool("noauth", false, "\n[optional] disable basic (user/pass) authentication. By default\n"+
+		"authentication is enabled\n")
+	flagset.Int("port", 0, "\n[optional] specify a tcp port to listen on. By default a random port is\n"+
+		"selected for you; this flag overides that behavior. You must be root to assign a port below 1024\n")
 
 	// usage function that's executed if a required flag is missing or user asks for help (-h)
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "\nUsage: %s [--expose <path> --expire <minutes> --refresh <seconds> --raw] <command>\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "\nUsage: %s [--expose <path> --expire <minutes> --refresh <seconds> --raw --noauth] <command>\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "\nFlags:\n\n")
 		flagset.PrintDefaults() // note "flagset." vs "flag."
 		fmt.Fprintf(os.Stderr, "\nExample 1: list the systems process table and refresh the output every 30 seconds.\n"+

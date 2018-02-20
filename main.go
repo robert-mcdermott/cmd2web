@@ -17,7 +17,7 @@ import (
 var cmd []string
 var user, pass string
 
-// generates a random string of chars of n lenght
+// generates a random string of chars of n length
 func randString(n int) string {
 	rand.Seed(time.Now().UnixNano())
 	chars := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
@@ -65,7 +65,7 @@ func createCerts(tempdir string, certKey, certPub []byte) {
 	}
 }
 
-// Delete the SSL cert/key from the the temp loacation after the server has started up
+// Delete the SSL cert/key from the the temp location after the server has started up
 func deleteCerts(tempdir string) {
 	time.Sleep(time.Second * 10)
 	err := os.Remove(fmt.Sprintf("%s/cert.key", tempdir))
@@ -89,9 +89,17 @@ func main() {
 	pass = randString(8)
 	accessKey := randString(32)
 	tempdir := os.TempDir()
-	port, err := getFreePort()
-	if err != nil {
-		log.Fatal(err)
+
+	var port int
+	if *portFlag != 0 {
+		lport := *portFlag
+		port = lport
+	} else {
+		lport, err := getFreePort()
+		if err != nil {
+			log.Fatal(err)
+		}
+		port = lport
 	}
 
 	// put the certs in place
@@ -121,7 +129,9 @@ func main() {
 	//beego.InsertFilter("*", beego.BeforeExec, authPlugin)
 	//Tried the above two variations, but the "beego.BeforeStatic" is the only
 	//one the that will prompt for password for static content (file or dir in this case)
-	beego.InsertFilter("*", beego.BeforeStatic, authPlugin)
+	if !*noauthFlag {
+		beego.InsertFilter("*", beego.BeforeStatic, authPlugin)
+	}
 	// if the user provided an "--expose </path>" flag, expose the provided directory as a filesystem
 	if *exposeFlag != "" {
 		// make sure that the path to the directory or file the user provided exists
@@ -157,9 +167,12 @@ func main() {
 	if *exposeFlag != "" {
 		fmt.Fprintf(os.Stderr, "Exposed directory: https://%s:%d/%s/file\n", hostname, port, accessKey)
 	}
-	fmt.Fprintf(os.Stderr, "Username: %s\n", user)
-	fmt.Fprintf(os.Stderr, "Password: %s\n\n", pass)
-	fmt.Fprintf(os.Stderr, "Easy Access URL:   https://%s:%s@%s:%d/%s\n", user, pass, hostname, port, accessKey)
+	if !*noauthFlag {
+		fmt.Fprintf(os.Stderr, "\nCredentials:\n\n")
+		fmt.Fprintf(os.Stderr, "  Username: %s\n", user)
+		fmt.Fprintf(os.Stderr, "  Password: %s\n", pass)
+		fmt.Fprintf(os.Stderr, "\nEasy Access URL:   https://%s:%s@%s:%d/%s\n", user, pass, hostname, port, accessKey)
+	}
 	fmt.Fprintf(os.Stderr, "-------------------------------------\n")
 	// start the server
 	beego.Run()
