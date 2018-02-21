@@ -93,4 +93,6 @@ Easy Access URL:   https://cmd2web:fLPlehdO@test.rigel.net:42938/2EeRbdGXIwMaYqZ
 
 ## Is this secure?
 
-The connection is SSL encrypted, a 32 byte random access key path is required to access the command output and exposed files and authentication (username/password) is required. In addition the application takes no input via the exposed web site so there is no way to inject any malicious commands. 
+The connection is SSL encrypted (AES-128/TLS 1.2), a 32 byte random path is required to access the command-output/exposed-files and authentication (username/password) is required by default. In addition, the application takes no input via the exposed web site so there is no way to inject any malicious input.
+
+The SSL certificate included in the source/binaries is a self-singed certificate. If you want to use a valid certificate, update the 'ssl.go' source file with your certificate and recompile for your desired platform. 
