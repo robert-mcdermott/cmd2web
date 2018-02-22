@@ -1,16 +1,20 @@
 # Cmd2web - Command to Web Utility
+[![Go Report Card](https://goreportcard.com/badge/github.com/robert-mcdermott/cmd2web)](https://goreportcard.com/report/github.com/robert-mcdermott/cmd2web)
 
 ![cmd2web example](images/cmd2web-browser.png)
 
 
 ## What is Cmd2web?
 
-Cmd2web is a utility that allows you to execute a command on a system and then securely view the output of that command on any other system via a web browser. Each time the page is reloaded the command is re-run and the output is updated. You can set the refresh interval that the command will be automatically re-run by you web browser.  
+Cmd2web is a dependency free, single binary utility that allows you to execute a command on a system and then securely view the output of that command on any other system via a web browser. Each time the page is reloaded the command is re-run and the output is updated. You can set the refresh interval that the command will be automatically re-run by you web browser.  
 
 In addition to command output you can also also optionally expose a directory or file via Cmd2web and make it accessible via a web browser on a remove system with the --expose flag. If you provide it a path to a directory, you'll get an html directory listing that lets you navigate sub-directories and view files. If a path to a file is provided path, only that file will be available. If the exposed directory contains an 'index.html' file, it will be exposed rather than showing a directory listing.
 
 An expiration timer can be optionally set that will stop the Cmd2web server when the timer expires. 
 
+## Downloading
+
+Cmd2web is availible in binary format for 64bit versions of Linux, MacOS and Windows on the [releases](https://github.com/robert-mcdermott/cmd2web/releases) page. 
 
 
 ## Usage
