@@ -14,8 +14,8 @@ var cmdhtml = `
 			</style>
 		</head>
 		<body>
-			<h3>Command: %s</h3>
-			<h3>Time: %s</h3>
+			<pre><h3>Command: %s</h3></pre>
+			<pre><h3>Time: %s</h3></pre>
 			<p><pre>%s</pre></p>
 		</body>
 	</html>`
