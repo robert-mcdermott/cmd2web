@@ -54,25 +54,25 @@ func secretAuth(username, password string) bool {
 // write the SSL cert/key to a temp location
 // I couldn't find a way to provide the cert/key as a string so this is
 // a workaround so I can still have a single file tool
-func createCerts(tempdir string, certKey, certPub []byte) {
-	err := ioutil.WriteFile(fmt.Sprintf("%s/cert.key", tempdir), certKey, 0644)
+func createCerts(certFileBase string, certKey, certPub []byte) {
+	err := ioutil.WriteFile(fmt.Sprintf("%s-cert.key", certFileBase), certKey, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = ioutil.WriteFile(fmt.Sprintf("%s/cert.pem", tempdir), certPub, 0644)
+	err = ioutil.WriteFile(fmt.Sprintf("%s-cert.pem", certFileBase), certPub, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 // Delete the SSL cert/key from the the temp location after the server has started up
-func deleteCerts(tempdir string) {
+func deleteCerts(certFileBase string) {
 	time.Sleep(time.Second * 10)
-	err := os.Remove(fmt.Sprintf("%s/cert.key", tempdir))
+	err := os.Remove(fmt.Sprintf("%s-cert.key", certFileBase))
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = os.Remove(fmt.Sprintf("%s/cert.pem", tempdir))
+	err = os.Remove(fmt.Sprintf("%s-cert.pem", certFileBase))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -88,7 +88,7 @@ func main() {
 	user = "cmd2web"
 	pass = randString(8)
 	accessKey := randString(32)
-	tempdir := os.TempDir()
+	certFileBase := fmt.Sprintf("%s/%s", os.TempDir(), randString(12))
 
 	var port int
 	if *portFlag != 0 {
@@ -103,7 +103,7 @@ func main() {
 	}
 
 	// put the certs in place
-	createCerts(tempdir, certKey, certPub)
+	createCerts(certFileBase, certKey, certPub)
 
 	// get the hostname of the system
 	hostname, err := os.Hostname()
@@ -120,8 +120,8 @@ func main() {
 	beego.BConfig.Log.AccessLogs = true
 	beego.BConfig.Listen.EnableHTTPS = true
 	beego.BConfig.Listen.HTTPSPort = port
-	beego.BConfig.Listen.HTTPSCertFile = fmt.Sprintf("%s/cert.pem", tempdir)
-	beego.BConfig.Listen.HTTPSKeyFile = fmt.Sprintf("%s/cert.key", tempdir)
+	beego.BConfig.Listen.HTTPSCertFile = fmt.Sprintf("%s-cert.pem", certFileBase)
+	beego.BConfig.Listen.HTTPSKeyFile = fmt.Sprintf("%s-cert.key", certFileBase)
 	beego.BConfig.WebConfig.DirectoryIndex = true
 	beego.BConfig.MaxMemory = 134217728 // 128MiB
 	authPlugin := auth.NewBasicAuthenticator(secretAuth, "cmd2web")
@@ -148,7 +148,7 @@ func main() {
 	beego.Router("/*", &mainController{})
 
 	// delete the certs in the backgroup
-	go deleteCerts(tempdir)
+	go deleteCerts(certFileBase)
 
 	// if an "--expire <int>" set a timer running in the background to exit after the desired number of minutes
 	if *expireFlag != 0 {
