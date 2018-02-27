@@ -20,7 +20,7 @@ Cmd2web is available in binary format for 64bit versions of Linux, MacOS and Win
 
 ```bash
 curl -L https://github.com/robert-mcdermott/cmd2web/releases/download/v0.1/cmd2web-linux-amd64 -o cmd2web
-chmod +x
+chmod +x cmd2web
 ./cmd2web
 ```
 
@@ -28,7 +28,7 @@ chmod +x
 
 ```bash
 curl -L https://github.com/robert-mcdermott/cmd2web/releases/download/v0.1/cmd2web-macos-amd64 -o cmd2web
-chmod +x
+chmod +x cmd2web
 ./cmd2web
 ```
 
