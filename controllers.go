@@ -27,9 +27,9 @@ type cmdController struct {
 }
 
 func (c *cmdController) Get() {
-	out, err := exec.Command(cmd[0], cmd[1:]...).Output()
+	out, err := exec.Command(cmd[0], cmd[1:]...).CombinedOutput()
 	if err != nil {
-		out = []byte(err.Error())
+		out = []byte(fmt.Sprint(err) + "\n\n" + string(out))
 	}
 	if *rawFlag {
 		c.Ctx.WriteString(string(out))

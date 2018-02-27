@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"net"
 	"os"
+	"os/exec"
 	"time"
 
 	"github.com/astaxie/beego"
@@ -78,6 +79,15 @@ func deleteCerts(certFileBase string) {
 	}
 }
 
+// checkCmdExists makes sure that the provided command is in the users path
+func checkCmdExists(command string) error {
+	_, err := exec.LookPath(command)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	//cmd = os.Args[1:]
 	cmd = flag.Args()
@@ -85,6 +95,14 @@ func main() {
 		flag.Usage()
 		os.Exit(1)
 	}
+
+	// check to see if the command exists before starting webserver
+	if err := checkCmdExists(cmd[0]); err != nil {
+		// command was not found; let the user know and exit
+		fmt.Fprintf(os.Stderr, "\nError: command \"%s\" not found\n\n", cmd[0])
+		os.Exit(2)
+	}
+
 	user = "cmd2web"
 	pass = randString(8)
 	accessKey := randString(32)
@@ -168,7 +186,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Exposed directory: https://%s:%d/%s/file\n", hostname, port, accessKey)
 	}
 	if !*noauthFlag {
-		fmt.Fprintf(os.Stderr, "\nCredentials:\n\n")
+		fmt.Fprintf(os.Stderr, "\nCredentials:\n")
 		fmt.Fprintf(os.Stderr, "  Username: %s\n", user)
 		fmt.Fprintf(os.Stderr, "  Password: %s\n", pass)
 		fmt.Fprintf(os.Stderr, "\nEasy Access URL:   https://%s:%s@%s:%d/%s\n", user, pass, hostname, port, accessKey)
