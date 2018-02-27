@@ -31,6 +31,6 @@ var four04html = `
 			</style>
 		</head>
 		<body>
-			<h3>%s</h3>
+			<pre><h3>%s</h3></pre>
 		</body>
 	</html>`
