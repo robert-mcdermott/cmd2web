@@ -12,10 +12,32 @@ In addition to command output you can also also optionally expose a directory or
 
 An expiration timer can be optionally set that will stop the Cmd2web server when the timer expires. 
 
-## Downloading
+## Installing
 
-Cmd2web is availible in binary format for 64bit versions of Linux, MacOS and Windows on the [releases](https://github.com/robert-mcdermott/cmd2web/releases) page. 
+Cmd2web is available in binary format for 64bit versions of Linux, MacOS and Windows on the [releases](https://github.com/robert-mcdermott/cmd2web/releases) page. 
 
+### Linux
+
+```bash
+curl -L https://github.com/robert-mcdermott/cmd2web/releases/download/v0.1/cmd2web-linux-amd64 -o cmd2web
+chmod +x
+./cmd2web
+```
+
+### macOS
+
+```bash
+curl -L https://github.com/robert-mcdermott/cmd2web/releases/download/v0.1/cmd2web-macos-amd64 -o cmd2web
+chmod +x
+./cmd2web
+```
+
+### Windows (via PowerShell session)
+
+```powershell
+Invoke-WebRequest https://github.com/robert-mcdermott/cmd2web/releases/download/v0.1/cmd2web-windows-amd64.exe -Out cmd2web.exe
+.\cmd2web.exe
+```
 
 ## Usage
 
@@ -74,6 +96,21 @@ Example 2: expose the "myproject" directory to the web for 60 minutes.
 
 ```
 
+### Command tips
+
+Commands should be of the type that fairly quickly return some output and exit. You can't execute long running commands with continually updating output such as "tail -f /var/log/syslog" or "top".  
+
+If your command is complex and contains pipes you must provide it to your shell in quotes like the following example:
+
+```
+./cmd2web bash -c "ps aux|grep -v root" 
+```
+
+If you are on Windows and are running a PowerShell Cmdlet (single or pipeline) you must provided it to PowerShell with the "-c" argument as shown in this example:
+
+```
+.\cmd2web.exe powershell -c "Get-Process|Sort-Object -Property PM -Descending"
+```
 
 ## Accessing the Cmd2web server
 
